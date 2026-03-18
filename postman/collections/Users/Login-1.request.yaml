@@ -1,0 +1,37 @@
+$kind: http-request
+name: Login
+url: "{{URL_Base}}/login"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: "{\r
+
+    \  \"email\": \"valquiriadamato@qa.com.br\",\r
+
+    \  \"password\": \"teste2026\"\r
+
+    }"
+scripts:
+  - type: afterResponse
+    code: "pm.collectionVariables.set(\"auth\", pm.response.json().authorization);\r
+
+      \r
+
+      pm.test(\"Status code\", function () {\r
+
+      \    pm.response.to.have.status(200);\r
+
+      });\r
+
+      \r
+
+      pm.test(\"JWT created\", function () {\r
+
+      \    pm.expect(pm.response.json().message).to.contains(\"Login realizado
+      com sucesso\");\r
+
+      });"
+    language: text/javascript
+order: 1000
