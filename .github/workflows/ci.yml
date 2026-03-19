@@ -21,13 +21,13 @@ jobs:
           npm install -g newman-reporter-htmlextra
 
       - name: Create reports directory
-        run: mkdir -p ./postman/reports
+        run: mkdir -p reports
 
       - name: Run Postman collection with Newman
         run: newman run ./postman/collections/Users/.resources/Users.postman_collection.json -e ./postman/collections/Users/.resources/enviromentServeRest.postman_environment.json --reporters cli,htmlextra --reporter-htmlextra-export ./postman/reports/reportsServeRest.html
 
       - name: Upload Newman report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
-          name: reportsServeRest
-          path: ./postman/reports
+          name: Test Report
+          path: repreportsServeRest.html
