@@ -5,8 +5,8 @@
 - Have newman installed on the machine, just run the command in node.js cmd:
 ```sh
 npm install -g newman
-
-- Download the project to the machine in directory "C:"
+```
+- Download the project to the machine
 
 #### Run project
 1. Run the project open node.js cmd
@@ -17,11 +17,11 @@ newman run ./postman/collections/Users/.resources/Users.postman_collection.json 
 ```
 
 #### View BDDS
-Access the following path:
-Create User: ./postman/collections/Users/Create User/.resources/definition.yaml
-Get User: ./postman/collections/Users/Get User/.resources/definition.yaml
-Update User: ./postman/collections/Users/Update User/.resources/definition.yaml
-Delete User: ./postman/collections/Users/Delete User/.resources/definition.yaml
+Access the following path:  
+Create User: ./postman/collections/Users/CreateUser/.resources/definition.yaml  
+Get User: ./postman/collections/Users/Get User/.resources/definition.yaml  
+Update User: ./postman/collections/Users/Update User/.resources/definition.yaml  
+Delete User: ./postman/collections/Users/Delete User/.resources/definition.yaml  
 
 #### View logs
 Access the following path ./postman/reports/reportsServeRest.html
