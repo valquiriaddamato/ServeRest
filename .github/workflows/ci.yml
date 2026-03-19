@@ -25,10 +25,10 @@ jobs:
           mkdir -p testresults
 
       - name: Run Postman collection with Newman
-        run: newman run ./postman/collections/Users/.resources/Users.postman_collection.json -e ./postman/collections/Users/.resources/enviromentServeRest.postman_environment.json -r htmlextra --reporter-htmlextra-export ./testresults/newman-report.html
+        run: newman run ./postman/collections/Users/.resources/Users.postman_collection.json -e ./postman/collections/Users/.resources/enviromentServeRest.postman_environment.json --reporters cli,json --reporter-json-export ./postman/reports/reportsServeRest.html
 
       - name: Upload Newman report as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: newman-report
-          path: testresults
+          name: reportsServeRest
+          path: reports
