@@ -1,0 +1,928 @@
+{
+  "info": {
+    "_postman_id": "ae2f3093-c0cd-4a11-b6a7-f4357978a72f",
+    "name": "Users",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "9721309",
+    "_collection_link": "https://go.postman.co/collection/9721309-ae2f3093-c0cd-4a11-b6a7-f4357978a72f?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Create User",
+      "item": [
+        {
+          "name": "Create a new user",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "var dynamicFirstName = pm.variables.replaceIn(\"{{$randomFirstName}}\");\r\npm.environment.set(\"name\", dynamicFirstName);\r\n\r\nvar dynamicEmail = pm.variables.replaceIn(\"{{$randomEmail}}\");\r\npm.environment.set(\"email\", dynamicEmail);\r\n\r\nvar dynamicPassword = pm.variables.replaceIn(\"{{$randomPassword}}\");\r\npm.environment.set(\"password\", dynamicPassword);\r\n\r\nvar dynamicAdmin = pm.variables.replaceIn(\"{{$randomBoolean}}\");\r\npm.environment.set(\"admin\", dynamicAdmin);"
+                ]
+              },
+              "disabled": false
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.environment.set(\"idClient\", pm.response.json()._id);\r\n\r\npm.test(\"Status code\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"User created\", function () {\r\n    pm.expect(pm.response.json().message).to.eql(\"Cadastro realizado com sucesso\");\r\n});"
+                ]
+              },
+              "disabled": false
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"{{name}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"{{password}}\",\r\n  \"administrador\": \"{{admin}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_Base}}/usuarios",
+              "host": [
+                "{{URL_Base}}"
+              ],
+              "path": [
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create a duplicate user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code\", function () {\r\n    pm.response.to.have.status(400);\r\n});\r\n\r\npm.test(\"User duplicate\", function () {\r\n    pm.expect(pm.response.json().message).to.eql(\"Este email já está sendo usado\");\r\n});"
+                ]
+              },
+              "disabled": false
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"{{name}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"{{password}}\",\r\n  \"administrador\": \"{{admin}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_Base}}/usuarios",
+              "host": [
+                "{{URL_Base}}"
+              ],
+              "path": [
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create a user with invalid email",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code\", function () {\r\n    pm.response.to.have.status(400);\r\n});\r\n\r\npm.test(\"Invalid email\", function () {\r\n    pm.expect(pm.response.json().email).to.eql(\"email deve ser um email válido\");\r\n});"
+                ]
+              },
+              "disabled": false
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"Invalid email\",\r\n  \"email\": \"email@c\",\r\n  \"password\": \"teste\",\r\n  \"administrador\": \"false\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_Base}}/usuarios",
+              "host": [
+                "{{URL_Base}}"
+              ],
+              "path": [
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create a user with admin invalid",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code\", function () {\r\n    pm.response.to.have.status(400);\r\n});\r\n\r\npm.test(\"User created\", function () {\r\n    pm.expect(pm.response.json().administrador).to.eql(\"administrador deve ser 'true' ou 'false'\");\r\n});"
+                ]
+              },
+              "disabled": false
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"Invalid admin\",\r\n  \"email\": \"teste@teste.com\",\r\n  \"password\": \"teste\",\r\n  \"administrador\": \"teste\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_Base}}/usuarios",
+              "host": [
+                "{{URL_Base}}"
+              ],
+              "path": [
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create a user without required fields",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code\", function () {\r\n    pm.response.to.have.status(400);\r\n});\r\n\r\npm.test(\"Validate required fields\", function () {\r\n    pm.expect(pm.response.json().nome).to.exist;\r\n    pm.expect(pm.response.json().email).to.exist;\r\n    pm.expect(pm.response.json().password).to.exist;\r\n    pm.expect(pm.response.json().administrador).to.exist;\r\n});"
+                ]
+              },
+              "disabled": false
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_Base}}/usuarios",
+              "host": [
+                "{{URL_Base}}"
+              ],
+              "path": [
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "# **Cenarios de teste da criação de usuarios**\n\n#### **Create a new user**\n\nDado que eu tenha permissão de cadastro de usuario  \nE tenha autenticacao valida  \nQuando executo a requisição do POST /usuarios com os dados corretos  \nEntao devo receber a mensagem no response body que o cadastro foi realizado com sucesso  \nE status code deve ser igual a 201\n\n#### **Create a duplicate user**\n\nDado que eu tenha permissão de cadastro de usuario  \nE tenha autenticacao valida  \nE tenha um usuario cadastrado  \nQuando executo a requisição do POST /usuarios com email duplicado/já existente no sistema  \nEntao devo receber a mensagem no response body que o email já está sendo usado  \nE status code deve ser igual a 400\n\n#### **Create a user with invalid email**\n\nDado que eu tenha permissão de cadastro de usuario  \nE tenha autenticacao valida  \nQuando executo a requisição do POST /usuarios com email invalido  \nEntao devo receber a mensagem no response body que o email deve ser um email válido  \nE status code deve ser igual a 400\n\n#### Create a user with admin invalid\n\nDado que eu tenha permissão de cadastro de usuario  \nE tenha autenticacao valida  \nQuando executo a requisição do POST /usuarios com email invalido  \nEntao devo receber a mensagem no response body que o campo administrador deve ser 'true' ou 'false'  \nE status code deve ser igual a 400\n\n#### **Create a user without required fields**\n\nDado que eu tenha permissão de cadastro de usuario  \nE tenha autenticacao valida  \nQuando executo a requisição do POST /usuarios com email invalido  \nEntao devo receber a mensagem no response body que os campos são obrigatórios  \nE status code deve ser igual a 400"
+    },
+    {
+      "name": "Get User",
+      "item": [
+        {
+          "name": "Get all users",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Get users\", function () {\r\n    pm.expect(pm.response.json().quantidade).to.exist;\r\n    pm.expect(pm.response.json().usuarios).to.exist;\r\n    pm.expect(pm.response.json().usuarios[0].nome).to.exist;\r\n    pm.expect(pm.response.json().usuarios[0].email).to.exist;\r\n    pm.expect(pm.response.json().usuarios[0].password).to.exist;\r\n    pm.expect(pm.response.json().usuarios[0].administrador).to.exist;\r\n    pm.expect(pm.response.json().usuarios[0]._id).to.exist;\r\n});"
+                ]
+              },
+              "disabled": false
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_Base}}/usuarios",
+              "host": [
+                "{{URL_Base}}"
+              ],
+              "path": [
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get a user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Get users\", function () {\r\n    pm.expect(pm.response.json().nome).to.equals(\"{{name}}\");\r\n    pm.expect(pm.response.json().email).to.equals(\"{{email}}\");\r\n    pm.expect(pm.response.json().password).to.equals(\"{{password}}\");\r\n    pm.expect(pm.response.json().administrador).to.equals(\"{{admin}}\");\r\n    pm.expect(pm.response.json()._id).to.equals(\"{{idClient}}\");\r\n});"
+                ]
+              },
+              "disabled": false
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.environment.unset(\"email\");\r\npm.environment.unset(\"name\");\r\npm.environment.unset(\"password\");\r\npm.environment.unset(\"admin\");\r\npm.environment.unset(\"idClient\");\r\n\r\ntry {\r\n    const response = await pm.execution.runRequest(\"71bf0C1FDe5Ff198D3e202e9\");\r\n\r\n    console.log(response.json());\r\n} catch (err) {\r\n    console.error(err);\r\n}"
+                ]
+              },
+              "disabled": false
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_Base}}/usuarios/{{idClient}}",
+              "host": [
+                "{{URL_Base}}"
+              ],
+              "path": [
+                "usuarios",
+                "{{idClient}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get a user with invalid ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code\", function () {\r\n    pm.response.to.have.status(400);\r\n});\r\n\r\npm.test(\"Invalid ID\", function () {\r\n    pm.expect(pm.response.json().id).to.equals(\"id deve ter exatamente 16 caracteres alfanuméricos\");\r\n});"
+                ]
+              },
+              "disabled": false
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_Base}}/usuarios/123456789",
+              "host": [
+                "{{URL_Base}}"
+              ],
+              "path": [
+                "usuarios",
+                "123456789"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get a user without registered",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code\", function () {\r\n    pm.response.to.have.status(400);\r\n});\r\n\r\npm.test(\"Get user not registered\", function () {\r\n    pm.expect(pm.response.json().message).to.equals(\"Usuário não encontrado\");\r\n});"
+                ]
+              },
+              "disabled": false
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_Base}}/usuarios/123456789val2026",
+              "host": [
+                "{{URL_Base}}"
+              ],
+              "path": [
+                "usuarios",
+                "123456789val2026"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "# **Cenarios de teste da visualização de usuarios**\n\n#### **Get all users**\n\nDado que eu tenha permissão de visualizar o cadastro de usuario  \nE tenha autenticacao valida  \nE tenha pelo menos um usuario cadastrado  \nQuando executo a requisição do GET /usuarios  \nEntao devo receber a resposta no response body com a quantidade de usuarios cadastrados e com os dados de cadastro de cada usuario  \nE status code deve ser igual a 200\n\n#### **Get a user**\n\nDado que eu tenha permissão de visualizar o cadastro cadastro de usuario  \nE tenha autenticacao valida  \nE tenha um usuario cadastrado  \nQuando executo a requisição do GET /usuarios/{{_id}} com ID valido  \nEntao devo receber a resposta no response body com os dados de cadastro do usuario  \nE status code deve ser igual a 200\n\n#### **Get a user with invalid ID**\n\nDado que eu tenha permissão de visualizar o cadastro cadastro de usuario  \nE tenha autenticacao valida  \nQuando executo a requisição do GET /usuarios/{{_id}} com ID contendo menos que 16 caracteres alfa-numericos  \nEntao devo receber a mensagem no response body que o ID deve conter 16 caracteres alfa-numericos  \nE status code deve ser igual a 400\n\n#### **Get a user without registered**\n\nDado que eu tenha permissão de visualizar o cadastro cadastro de usuario  \nE tenha autenticacao valida  \nQuando executo a requisição do GET /usuarios/{{_id}} com ID inexistente  \nEntao devo receber a mensagem no response body que o usuario não foi encontrado  \nE status code deve ser igual a 400"
+    },
+    {
+      "name": "Update User",
+      "item": [
+        {
+          "name": "Update a user",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "var dynamicFirstName = pm.variables.replaceIn(\"{{$randomFirstName}}\");\r\npm.environment.set(\"name\", dynamicFirstName);\r\n\r\nvar dynamicEmail = pm.variables.replaceIn(\"{{$randomEmail}}\");\r\npm.environment.set(\"email\", dynamicEmail);\r\n\r\nvar dynamicPassword = pm.variables.replaceIn(\"{{$randomPassword}}\");\r\npm.environment.set(\"password\", dynamicPassword);\r\n\r\nvar dynamicAdmin = pm.variables.replaceIn(\"{{$randomBoolean}}\");\r\npm.environment.set(\"admin\", dynamicAdmin);"
+                ]
+              },
+              "disabled": false
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.environment.set(\"idClient\", pm.response.json()._id);\r\n\r\npm.test(\"Status code\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"User created\", function () {\r\n    pm.expect(pm.response.json().message).to.eql(\"Registro alterado com sucesso\");\r\n});"
+                ]
+              },
+              "disabled": false
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"{{name}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"{{password}}\",\r\n  \"administrador\": \"{{admin}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_Base}}/usuarios/{{idClient}}",
+              "host": [
+                "{{URL_Base}}"
+              ],
+              "path": [
+                "usuarios",
+                "{{idClient}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update a duplicate user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code\", function () {\r\n    pm.response.to.have.status(400);\r\n});\r\n\r\npm.test(\"User with email duplicate\", function () {\r\n    pm.expect(pm.response.json().message).to.eql(\"Este email já está sendo usado\");\r\n});"
+                ]
+              },
+              "disabled": false
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"{{name}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"{{password}}\",\r\n  \"administrador\": \"{{admin}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_Base}}/usuarios/{{idClient}}",
+              "host": [
+                "{{URL_Base}}"
+              ],
+              "path": [
+                "usuarios",
+                "{{idClient}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update a user with invalid email",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code\", function () {\r\n    pm.response.to.have.status(400);\r\n});\r\n\r\npm.test(\"Invalid email\", function () {\r\n    pm.expect(pm.response.json().email).to.eql(\"email deve ser um email válido\");\r\n});"
+                ]
+              },
+              "disabled": false
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"Invalid email\",\r\n  \"email\": \"email@c\",\r\n  \"password\": \"teste\",\r\n  \"administrador\": \"false\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_Base}}/usuarios/{{idClient}}",
+              "host": [
+                "{{URL_Base}}"
+              ],
+              "path": [
+                "usuarios",
+                "{{idClient}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update a user with admin invalid",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code\", function () {\r\n    pm.response.to.have.status(400);\r\n});\r\n\r\npm.test(\"User created\", function () {\r\n    pm.expect(pm.response.json().administrador).to.eql(\"administrador deve ser 'true' ou 'false'\");\r\n});"
+                ]
+              },
+              "disabled": false
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"Invalid admin\",\r\n  \"email\": \"teste@teste.com\",\r\n  \"password\": \"teste\",\r\n  \"administrador\": \"teste\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_Base}}/usuarios/{{idClient}}",
+              "host": [
+                "{{URL_Base}}"
+              ],
+              "path": [
+                "usuarios",
+                "{{idClient}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update a user without required fields",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code\", function () {\r\n    pm.response.to.have.status(400);\r\n});\r\n\r\npm.test(\"Validate required fields\", function () {\r\n    pm.expect(pm.response.json().nome).to.exist;\r\n    pm.expect(pm.response.json().email).to.exist;\r\n    pm.expect(pm.response.json().password).to.exist;\r\n    pm.expect(pm.response.json().administrador).to.exist;\r\n});"
+                ]
+              },
+              "disabled": false
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_Base}}/usuarios/{{idClient}}",
+              "host": [
+                "{{URL_Base}}"
+              ],
+              "path": [
+                "usuarios",
+                "{{idClient}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "# **Cenarios de teste da alteração dos dados de usuarios**\n\n#### **Update a user**\n\nDado que eu tenha permissão de cadastro de usuario  \nE tenha autenticacao valida  \nE tenha um usuario cadastrado  \nQuando executo a requisição do PUT /usuarios/{{_id}} com os dados corretos  \nEntao devo receber a mensagem no response body que o registro foi alterado com sucesso  \nE status code deve ser igual a 200\n\n#### **Update a duplicate user**\n\nDado que eu tenha permissão de cadastro de usuario  \nE tenha autenticacao valida  \nE tenha um usuario cadastrado  \nQuando executo a requisição do PUT /usuarios/{{_id}} com email duplicado/já existente no sistema  \nEntao devo receber a mensagem no response body que o email já está sendo usado  \nE status code deve ser igual a 400\n\n#### **Update a user with invalid email**\n\nDado que eu tenha permissão de cadastro de usuario  \nE tenha autenticacao valida  \nE tenha um usuario cadastrado  \nQuando executo a requisição do PUT /usuarios/{{_id}} com email invalido  \nEntao devo receber a mensagem no response body que o email deve ser um email válido  \nE status code deve ser igual a 400\n\n#### **Update** a user with admin invalid\n\nDado que eu tenha permissão de cadastro de usuario  \nE tenha autenticacao valida  \nE tenha um usuario cadastrado  \nQuando executo a requisição do PUT /usuarios/{{_id}} com email invalido  \nEntao devo receber a mensagem no response body que o campo administrador deve ser 'true' ou 'false'  \nE status code deve ser igual a 400\n\n#### **Update a user without required fields**\n\nDado que eu tenha permissão de cadastro de usuario  \nE tenha autenticacao valida  \nE tenha um usuario cadastrado  \nQuando executo a requisição do PUT /usuarios/{{_id}} com email invalido  \nEntao devo receber a mensagem no response body que os campos são obrigatórios  \nE status code deve ser igual a 400"
+    },
+    {
+      "name": "Delete User",
+      "item": [
+        {
+          "name": "Delete a user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"User deleted\", function () {\r\n    pm.expect(pm.response.json().message).to.eql(\"Registro excluído com sucesso\");\r\n});"
+                ]
+              },
+              "disabled": false
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.environment.unset(\"email\");\r\n\r\ntry {\r\n    const response = await pm.execution.runRequest(\"71bf0C1FDe5Ff198D3e202e9\");\r\n\r\n    console.log(response.json());\r\n} catch (err) {\r\n    console.error(err);\r\n}"
+                ]
+              },
+              "disabled": false
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{URL_Base}}/usuarios/{{idClient}}",
+              "host": [
+                "{{URL_Base}}"
+              ],
+              "path": [
+                "usuarios",
+                "{{idClient}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete a user without registered",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Delete user not registered\", function () {\r\n    pm.expect(pm.response.json().message).to.equals(\"Nenhum registro excluído\");\r\n});"
+                ]
+              },
+              "disabled": false
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{URL_Base}}/usuarios/123456789val2026",
+              "host": [
+                "{{URL_Base}}"
+              ],
+              "path": [
+                "usuarios",
+                "123456789val2026"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "# **Cenarios de teste de exclusão de usuarios**\n\n#### **Delete a user**\n\nDado que eu tenha permissão de cadastro de usuario  \nE tenha autenticacao valida  \nE tenha um usuario cadastrado  \nQuando executo a requisição do DELETE /usuarios/{{_id}} com os dados corretos  \nEntao devo receber a mensagem no response body que o registro foi deletado com sucesso  \nE status code deve ser igual a 200\n\n#### **Delete a user without registered**\n\nDado que eu tenha permissão de visualizar o cadastro cadastro de usuario  \nE tenha autenticacao valida  \nQuando executo a requisição do DELETE /usuarios/{{_id}} com ID inexistente  \nEntao devo receber a mensagem no response body que nenhum registro foi excluido  \nE status code deve ser igual a 200"
+    },
+    {
+      "name": "Create a user for login",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{auth}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nome\": \"Val\",\r\n  \"email\": \"val@teste.com\",\r\n  \"password\": \"teste2026\",\r\n  \"administrador\": \"true\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{URL_Base}}/usuarios",
+          "host": [
+            "{{URL_Base}}"
+          ],
+          "path": [
+            "usuarios"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.globals.set(\"auth\", pm.response.json().authorization);\r\n\r\npm.test(\"Status code\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"JWT created\", function () {\r\n    pm.expect(pm.response.json().message).to.contains(\"Login realizado com sucesso\");\r\n});"
+            ]
+          },
+          "disabled": false
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"val@teste.com\",\r\n  \"password\": \"teste2026\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{URL_Base}}/login",
+          "host": [
+            "{{URL_Base}}"
+          ],
+          "path": [
+            "login"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
