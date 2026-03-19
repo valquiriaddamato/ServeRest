@@ -8,6 +8,95 @@
   },
   "item": [
     {
+      "name": "Login",
+      "item": [
+        {
+          "name": "Create a user for login",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"Val\",\r\n  \"email\": \"val@teste.com\",\r\n  \"password\": \"teste2026\",\r\n  \"administrador\": \"true\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_Base}}/usuarios",
+              "host": [
+                "{{URL_Base}}"
+              ],
+              "path": [
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.globals.set(\"auth\", pm.response.json().authorization);\r\n\r\npm.test(\"Status code\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"JWT created\", function () {\r\n    pm.expect(pm.response.json().message).to.contains(\"Login realizado com sucesso\");\r\n});"
+                ]
+              },
+              "disabled": false
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"val@teste.com\",\r\n  \"password\": \"teste2026\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_Base}}/login",
+              "host": [
+                "{{URL_Base}}"
+              ],
+              "path": [
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
       "name": "Create User",
       "item": [
         {
@@ -292,6 +381,69 @@
       "name": "Get User",
       "item": [
         {
+          "name": "Create a new user for get",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "var dynamicFirstName = pm.variables.replaceIn(\"{{$randomFirstName}}\");\r\npm.environment.set(\"name\", dynamicFirstName);\r\n\r\nvar dynamicEmail = pm.variables.replaceIn(\"{{$randomEmail}}\");\r\npm.environment.set(\"email\", dynamicEmail);\r\n\r\nvar dynamicPassword = pm.variables.replaceIn(\"{{$randomPassword}}\");\r\npm.environment.set(\"password\", dynamicPassword);\r\n\r\nvar dynamicAdmin = pm.variables.replaceIn(\"{{$randomBoolean}}\");\r\npm.environment.set(\"admin\", dynamicAdmin);"
+                ]
+              },
+              "disabled": false
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.environment.set(\"idClient\", pm.response.json()._id);\r\n\r\npm.test(\"Status code\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"User created\", function () {\r\n    pm.expect(pm.response.json().message).to.eql(\"Cadastro realizado com sucesso\");\r\n});"
+                ]
+              },
+              "disabled": false
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"{{name}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"{{password}}\",\r\n  \"administrador\": \"{{admin}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_Base}}/usuarios",
+              "host": [
+                "{{URL_Base}}"
+              ],
+              "path": [
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "Get all users",
           "event": [
             {
@@ -336,20 +488,40 @@
             {
               "listen": "test",
               "script": {
-                "type": "text/javascript",
                 "exec": [
-                  "pm.test(\"Status code\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Get users\", function () {\r\n    pm.expect(pm.response.json().nome).to.equals(\"{{name}}\");\r\n    pm.expect(pm.response.json().email).to.equals(\"{{email}}\");\r\n    pm.expect(pm.response.json().password).to.equals(\"{{password}}\");\r\n    pm.expect(pm.response.json().administrador).to.equals(\"{{admin}}\");\r\n    pm.expect(pm.response.json()._id).to.equals(\"{{idClient}}\");\r\n});"
-                ]
+                  "pm.test(\"Status code\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Get users\", function () {\r",
+                  "    var varName = pm.variables.get(\"name\");\r",
+                  "    var varEmail = pm.variables.get(\"email\");\r",
+                  "    var varPassword = pm.variables.get(\"password\");\r",
+                  "    var varAdmin = pm.variables.get(\"admin\");\r",
+                  "    var varId = pm.variables.get(\"idClient\");\r",
+                  "\r",
+                  "    pm.expect(pm.response.json().nome).to.equals(varName);\r",
+                  "    pm.expect(pm.response.json().email).to.equals(varEmail);\r",
+                  "    pm.expect(pm.response.json().password).to.equals(varPassword);\r",
+                  "    pm.expect(pm.response.json().administrador).to.equals(varAdmin);\r",
+                  "    pm.expect(pm.response.json()._id).to.equals(varId);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               },
               "disabled": false
             },
             {
               "listen": "prerequest",
               "script": {
-                "type": "text/javascript",
                 "exec": [
-                  "pm.environment.unset(\"email\");\r\npm.environment.unset(\"name\");\r\npm.environment.unset(\"password\");\r\npm.environment.unset(\"admin\");\r\npm.environment.unset(\"idClient\");\r\n\r\ntry {\r\n    const response = await pm.execution.runRequest(\"71bf0C1FDe5Ff198D3e202e9\");\r\n\r\n    console.log(response.json());\r\n} catch (err) {\r\n    console.error(err);\r\n}"
-                ]
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               },
               "disabled": false
             }
@@ -466,6 +638,69 @@
     {
       "name": "Update User",
       "item": [
+        {
+          "name": "Create a new user for update",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "var dynamicFirstName = pm.variables.replaceIn(\"{{$randomFirstName}}\");\r\npm.environment.set(\"name\", dynamicFirstName);\r\n\r\nvar dynamicEmail = pm.variables.replaceIn(\"{{$randomEmail}}\");\r\npm.environment.set(\"email\", dynamicEmail);\r\n\r\nvar dynamicPassword = pm.variables.replaceIn(\"{{$randomPassword}}\");\r\npm.environment.set(\"password\", dynamicPassword);\r\n\r\nvar dynamicAdmin = pm.variables.replaceIn(\"{{$randomBoolean}}\");\r\npm.environment.set(\"admin\", dynamicAdmin);"
+                ]
+              },
+              "disabled": false
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.environment.set(\"idClient\", pm.response.json()._id);\r\n\r\npm.test(\"Status code\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"User created\", function () {\r\n    pm.expect(pm.response.json().message).to.eql(\"Cadastro realizado com sucesso\");\r\n});"
+                ]
+              },
+              "disabled": false
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"{{name}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"{{password}}\",\r\n  \"administrador\": \"{{admin}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_Base}}/usuarios",
+              "host": [
+                "{{URL_Base}}"
+              ],
+              "path": [
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
         {
           "name": "Update a user",
           "event": [
@@ -748,25 +983,98 @@
       "name": "Delete User",
       "item": [
         {
-          "name": "Delete a user",
+          "name": "Create a new user for delete",
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "var dynamicFirstName = pm.variables.replaceIn(\"{{$randomFirstName}}\");\r\npm.environment.set(\"name\", dynamicFirstName);\r\n\r\nvar dynamicEmail = pm.variables.replaceIn(\"{{$randomEmail}}\");\r\npm.environment.set(\"email\", dynamicEmail);\r\n\r\nvar dynamicPassword = pm.variables.replaceIn(\"{{$randomPassword}}\");\r\npm.environment.set(\"password\", dynamicPassword);\r\n\r\nvar dynamicAdmin = pm.variables.replaceIn(\"{{$randomBoolean}}\");\r\npm.environment.set(\"admin\", dynamicAdmin);"
+                ]
+              },
+              "disabled": false
+            },
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test(\"Status code\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"User deleted\", function () {\r\n    pm.expect(pm.response.json().message).to.eql(\"Registro excluído com sucesso\");\r\n});"
+                  "pm.environment.set(\"idClient\", pm.response.json()._id);\r\n\r\npm.test(\"Status code\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"User created\", function () {\r\n    pm.expect(pm.response.json().message).to.eql(\"Cadastro realizado com sucesso\");\r\n});"
                 ]
+              },
+              "disabled": false
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"{{name}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"{{password}}\",\r\n  \"administrador\": \"{{admin}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_Base}}/usuarios",
+              "host": [
+                "{{URL_Base}}"
+              ],
+              "path": [
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete a user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"User deleted\", function () {\r",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Registro excluído com sucesso\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               },
               "disabled": false
             },
             {
               "listen": "prerequest",
               "script": {
-                "type": "text/javascript",
                 "exec": [
-                  "pm.environment.unset(\"email\");\r\n\r\ntry {\r\n    const response = await pm.execution.runRequest(\"71bf0C1FDe5Ff198D3e202e9\");\r\n\r\n    console.log(response.json());\r\n} catch (err) {\r\n    console.error(err);\r\n}"
-                ]
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               },
               "disabled": false
             }
@@ -839,90 +1147,6 @@
         }
       ],
       "description": "# **Cenarios de teste de exclusão de usuarios**\n\n#### **Delete a user**\n\nDado que eu tenha permissão de cadastro de usuario  \nE tenha autenticacao valida  \nE tenha um usuario cadastrado  \nQuando executo a requisição do DELETE /usuarios/{{_id}} com os dados corretos  \nEntao devo receber a mensagem no response body que o registro foi deletado com sucesso  \nE status code deve ser igual a 200\n\n#### **Delete a user without registered**\n\nDado que eu tenha permissão de visualizar o cadastro cadastro de usuario  \nE tenha autenticacao valida  \nQuando executo a requisição do DELETE /usuarios/{{_id}} com ID inexistente  \nEntao devo receber a mensagem no response body que nenhum registro foi excluido  \nE status code deve ser igual a 200"
-    },
-    {
-      "name": "Create a user for login",
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{auth}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"nome\": \"Val\",\r\n  \"email\": \"val@teste.com\",\r\n  \"password\": \"teste2026\",\r\n  \"administrador\": \"true\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{URL_Base}}/usuarios",
-          "host": [
-            "{{URL_Base}}"
-          ],
-          "path": [
-            "usuarios"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Login",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              "pm.globals.set(\"auth\", pm.response.json().authorization);\r\n\r\npm.test(\"Status code\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"JWT created\", function () {\r\n    pm.expect(pm.response.json().message).to.contains(\"Login realizado com sucesso\");\r\n});"
-            ]
-          },
-          "disabled": false
-        }
-      ],
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"email\": \"val@teste.com\",\r\n  \"password\": \"teste2026\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{URL_Base}}/login",
-          "host": [
-            "{{URL_Base}}"
-          ],
-          "path": [
-            "login"
-          ]
-        }
-      },
-      "response": []
     }
   ]
 }
