@@ -1,3 +1,70 @@
 $kind: collection
 name: Get User
+description: >-
+  # **Cenarios de teste da visualização de usuarios**
+
+
+  #### **Get all users**
+
+
+  Dado que eu tenha permissão de visualizar o cadastro de usuario  
+
+  E tenha autenticacao valida  
+
+  E tenha pelo menos um usuario cadastrado  
+
+  Quando executo a requisição do GET /usuarios  
+
+  Entao devo receber a resposta no response body com a quantidade de usuarios
+  cadastrados e com os dados de cadastro de cada usuario  
+
+  E status code deve ser igual a 200
+
+
+  #### **Get a user**
+
+
+  Dado que eu tenha permissão de visualizar o cadastro cadastro de usuario  
+
+  E tenha autenticacao valida  
+
+  E tenha um usuario cadastrado  
+
+  Quando executo a requisição do GET /usuarios/{{_id}} com ID valido  
+
+  Entao devo receber a resposta no response body com os dados de cadastro do
+  usuario  
+
+  E status code deve ser igual a 200
+
+
+  #### **Get a user with invalid ID**
+
+
+  Dado que eu tenha permissão de visualizar o cadastro cadastro de usuario  
+
+  E tenha autenticacao valida  
+
+  Quando executo a requisição do GET /usuarios/{{_id}} com ID contendo menos que
+  16 caracteres alfa-numericos  
+
+  Entao devo receber a mensagem no response body que o ID deve conter 16
+  caracteres alfa-numericos  
+
+  E status code deve ser igual a 400
+
+
+  #### **Get a user without registered**
+
+
+  Dado que eu tenha permissão de visualizar o cadastro cadastro de usuario  
+
+  E tenha autenticacao valida  
+
+  Quando executo a requisição do GET /usuarios/{{_id}} com ID inexistente  
+
+  Entao devo receber a mensagem no response body que o usuario não foi
+  encontrado  
+
+  E status code deve ser igual a 400
 order: 397076308426751

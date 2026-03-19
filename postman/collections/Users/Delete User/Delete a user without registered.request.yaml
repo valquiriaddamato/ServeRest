@@ -1,0 +1,27 @@
+$kind: http-request
+name: Delete a user without registered
+url: "{{URL_Base}}/usuarios/123456789val2026"
+method: DELETE
+auth:
+  credentials:
+    - key: token
+      value: "{{auth}}"
+  type: bearer
+scripts:
+  - type: afterResponse
+    code: "pm.test(\"Status code\", function () {\r
+
+      \    pm.response.to.have.status(200);\r
+
+      });\r
+
+      \r
+
+      pm.test(\"Delete user not registered\", function () {\r
+
+      \    pm.expect(pm.response.json().message).to.equals(\"Nenhum registro
+      excluído\");\r
+
+      });"
+    language: text/javascript
+order: 3291448673710329

@@ -1,0 +1,38 @@
+$kind: collection
+name: Delete User
+description: >-
+  # **Cenarios de teste de exclusão de usuarios**
+
+
+  #### **Delete a user**
+
+
+  Dado que eu tenha permissão de cadastro de usuario  
+
+  E tenha autenticacao valida  
+
+  E tenha um usuario cadastrado  
+
+  Quando executo a requisição do DELETE /usuarios/{{_id}} com os dados
+  corretos  
+
+  Entao devo receber a mensagem no response body que o registro foi deletado com
+  sucesso  
+
+  E status code deve ser igual a 200
+
+
+  #### **Delete a user without registered**
+
+
+  Dado que eu tenha permissão de visualizar o cadastro cadastro de usuario  
+
+  E tenha autenticacao valida  
+
+  Quando executo a requisição do DELETE /usuarios/{{_id}} com ID inexistente  
+
+  Entao devo receber a mensagem no response body que nenhum registro foi
+  excluido  
+
+  E status code deve ser igual a 200
+order: 4481935543894015

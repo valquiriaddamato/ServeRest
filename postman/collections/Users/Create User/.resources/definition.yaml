@@ -1,3 +1,83 @@
 $kind: collection
 name: Create User
+description: >-
+  # **Cenarios de teste da criação de usuarios**
+
+
+  #### **Create a new user**
+
+
+  Dado que eu tenha permissão de cadastro de usuario  
+
+  E tenha autenticacao valida  
+
+  Quando executo a requisição do POST /usuarios com os dados corretos  
+
+  Entao devo receber a mensagem no response body que o cadastro foi realizado
+  com sucesso  
+
+  E status code deve ser igual a 201
+
+
+  #### **Create a duplicate user**
+
+
+  Dado que eu tenha permissão de cadastro de usuario  
+
+  E tenha autenticacao valida  
+
+  E tenha um usuario cadastrado  
+
+  Quando executo a requisição do POST /usuarios com email duplicado/já existente
+  no sistema  
+
+  Entao devo receber a mensagem no response body que o email já está sendo
+  usado  
+
+  E status code deve ser igual a 400
+
+
+  #### **Create a user with invalid email**
+
+
+  Dado que eu tenha permissão de cadastro de usuario  
+
+  E tenha autenticacao valida  
+
+  Quando executo a requisição do POST /usuarios com email invalido  
+
+  Entao devo receber a mensagem no response body que o email deve ser um email
+  válido  
+
+  E status code deve ser igual a 400
+
+
+  #### Create a user with admin invalid
+
+
+  Dado que eu tenha permissão de cadastro de usuario  
+
+  E tenha autenticacao valida  
+
+  Quando executo a requisição do POST /usuarios com email invalido  
+
+  Entao devo receber a mensagem no response body que o campo administrador deve
+  ser 'true' ou 'false'  
+
+  E status code deve ser igual a 400
+
+
+  #### **Create a user without required fields**
+
+
+  Dado que eu tenha permissão de cadastro de usuario  
+
+  E tenha autenticacao valida  
+
+  Quando executo a requisição do POST /usuarios com email invalido  
+
+  Entao devo receber a mensagem no response body que os campos são
+  obrigatórios  
+
+  E status code deve ser igual a 400
 order: 133579041406975

@@ -1,7 +1,7 @@
 $kind: http-request
-name: Update user without required fields
-url: "{{URL_Base}}/usuarios/{{idClient}}"
-method: PUT
+name: Create a user without required fields
+url: "{{URL_Base}}/usuarios"
+method: POST
 headers:
   - key: Content-Type
     value: application/json
@@ -35,4 +35,4 @@ scripts:
 
       });"
     language: text/javascript
-order: 4466379944614507
+order: 9000

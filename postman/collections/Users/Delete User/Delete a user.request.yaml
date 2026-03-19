@@ -1,10 +1,11 @@
 $kind: http-request
-name: Get a user
+name: Delete a user
 url: "{{URL_Base}}/usuarios/{{idClient}}"
-method: GET
+method: DELETE
 auth:
   credentials:
-    token: "{{auth}}"
+    - key: token
+      value: "{{auth}}"
   type: bearer
 scripts:
   - type: afterResponse
@@ -16,31 +17,15 @@ scripts:
 
       \r
 
-      pm.test(\"Get users\", function () {\r
+      pm.test(\"User deleted\", function () {\r
 
-      \    pm.expect(pm.response.json().nome).to.equals(\"{{name}}\");\r
-
-      \    pm.expect(pm.response.json().email).to.equals(\"{{email}}\");\r
-
-      \    pm.expect(pm.response.json().password).to.equals(\"{{password}}\");\r
-
-      \    pm.expect(pm.response.json().administrador).to.equals(\"{{admin}}\");\
-      \r
-
-      \    pm.expect(pm.response.json()._id).to.equals(\"{{idClient}}\");\r
+      \    pm.expect(pm.response.json().message).to.eql(\"Registro excluído com
+      sucesso\");\r
 
       });"
     language: text/javascript
   - type: beforeRequest
     code: "pm.environment.unset(\"email\");\r
-
-      pm.environment.unset(\"name\");\r
-
-      pm.environment.unset(\"password\");\r
-
-      pm.environment.unset(\"admin\");\r
-
-      pm.environment.unset(\"idClient\");\r
 
       \r
 
@@ -67,4 +52,4 @@ scripts:
           - Users
           - Create User
           - Create a new user
-order: 2000
+order: 1773921745167

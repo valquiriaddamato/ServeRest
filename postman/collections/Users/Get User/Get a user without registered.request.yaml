@@ -23,4 +23,4 @@ scripts:
 
       });"
     language: text/javascript
-order: 6000
+order: 5000

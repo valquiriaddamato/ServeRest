@@ -1,5 +1,5 @@
 $kind: http-request
-name: Update a User
+name: Update a user
 url: "{{URL_Base}}/usuarios/{{idClient}}"
 method: PUT
 body:
@@ -16,9 +16,10 @@ body:
 
     }"
 auth:
-  type: bearer
   credentials:
-    token: "{{auth}}"
+    - key: token
+      value: "{{auth}}"
+  type: bearer
 scripts:
   - type: beforeRequest
     code: "var dynamicFirstName =

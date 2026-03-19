@@ -1,4 +1,2 @@
 $kind: collection
 name: Users
-variables:
-  auth: ""
