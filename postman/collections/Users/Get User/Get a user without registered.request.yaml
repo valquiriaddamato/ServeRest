@@ -16,11 +16,11 @@ scripts:
 
       \r
 
-      pm.test(\"Get users\", function () {\r
+      pm.test(\"Get user not registered\", function () {\r
 
       \    pm.expect(pm.response.json().message).to.equals(\"Usuário não
       encontrado\");\r
 
       });"
     language: text/javascript
-order: 3029554706272722
+order: 6000

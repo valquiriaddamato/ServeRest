@@ -1,9 +1,10 @@
 $kind: http-request
-name: Create a user with admin invalid
-url: "{{URL_Base}}/usuarios"
-method: POST
+name: Update a user with admin invalid
+url: "{{URL_Base}}/usuarios/{{idClient}}"
+method: PUT
 headers:
-  Content-Type: application/json
+  - key: Content-Type
+    value: application/json
 body:
   type: json
   content: "{\r
@@ -19,7 +20,8 @@ body:
     }"
 auth:
   credentials:
-    token: "{{auth}}"
+    - key: token
+      value: "{{auth}}"
   type: bearer
 scripts:
   - type: afterResponse
@@ -38,4 +40,4 @@ scripts:
 
       });"
     language: text/javascript
-order: 7000
+order: 4437871367439347

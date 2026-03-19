@@ -1,9 +1,7 @@
 $kind: http-request
-name: Create a new user
-url: "{{URL_Base}}/usuarios"
-method: POST
-headers:
-  Content-Type: application/json
+name: Update a User
+url: "{{URL_Base}}/usuarios/{{idClient}}"
+method: PUT
 body:
   type: json
   content: "{\r
@@ -53,7 +51,7 @@ scripts:
 
       pm.test(\"Status code\", function () {\r
 
-      \    pm.response.to.have.status(201);\r
+      \    pm.response.to.have.status(200);\r
 
       });\r
 
@@ -61,9 +59,9 @@ scripts:
 
       pm.test(\"User created\", function () {\r
 
-      \    pm.expect(pm.response.json().message).to.eql(\"Cadastro realizado com
+      \    pm.expect(pm.response.json().message).to.eql(\"Registro alterado com
       sucesso\");\r
 
       });"
     language: text/javascript
-order: 1000
+order: 2660998740403156

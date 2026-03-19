@@ -1,0 +1,41 @@
+$kind: http-request
+name: Update a duplicate user
+url: "{{URL_Base}}/usuarios/{{idClient}}"
+method: PUT
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: "{\r
+
+    \  \"nome\": \"{{name}}\",\r
+
+    \  \"email\": \"{{email}}\",\r
+
+    \  \"password\": \"{{password}}\",\r
+
+    \  \"administrador\": \"{{admin}}\"\r
+
+    }"
+auth:
+  credentials:
+    token: "{{auth}}"
+  type: bearer
+scripts:
+  - type: afterResponse
+    code: "pm.test(\"Status code\", function () {\r
+
+      \    pm.response.to.have.status(400);\r
+
+      });\r
+
+      \r
+
+      pm.test(\"User with email duplicate\", function () {\r
+
+      \    pm.expect(pm.response.json().message).to.eql(\"Este email já está
+      sendo usado\");\r
+
+      });"
+    language: text/javascript
+order: 3692657938798636

@@ -1,7 +1,7 @@
 $kind: http-request
-name: Create user with invalid email
-url: "{{URL_Base}}/usuarios"
-method: POST
+name: Update user with invalid email
+url: "{{URL_Base}}/usuarios/{{idClient}}"
+method: PUT
 headers:
   - key: Content-Type
     value: application/json
@@ -40,4 +40,4 @@ scripts:
 
       });"
     language: text/javascript
-order: 5000
+order: 4362171718241287
