@@ -1,0 +1,26 @@
+$kind: http-request
+name: Get a user without registered
+url: "{{URL_Base}}/usuarios/123456789val2026"
+method: GET
+auth:
+  credentials:
+    token: "{{auth}}"
+  type: bearer
+scripts:
+  - type: afterResponse
+    code: "pm.test(\"Status code\", function () {\r
+
+      \    pm.response.to.have.status(400);\r
+
+      });\r
+
+      \r
+
+      pm.test(\"Get users\", function () {\r
+
+      \    pm.expect(pm.response.json().message).to.equals(\"Usuário não
+      encontrado\");\r
+
+      });"
+    language: text/javascript
+order: 3029554706272722

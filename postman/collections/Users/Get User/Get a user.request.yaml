@@ -1,0 +1,9 @@
+$kind: http-request
+name: Get a user
+url: "{{URL_Base}}/usuarios/{{idClient}}"
+method: GET
+auth:
+  credentials:
+    token: "{{auth}}"
+  type: bearer
+order: 1625

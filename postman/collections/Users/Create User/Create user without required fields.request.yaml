@@ -1,22 +1,12 @@
 $kind: http-request
-name: Create a duplicate user
+name: Create user without required fields
 url: "{{URL_Base}}/usuarios"
 method: POST
 headers:
   Content-Type: application/json
 body:
   type: json
-  content: "{\r
-
-    \  \"nome\": \"{{name}}\",\r
-
-    \  \"email\": \"{{email}}\",\r
-
-    \  \"password\": \"{{password}}\",\r
-
-    \  \"administrador\": \"{{admin}}\"\r
-
-    }"
+  content: "{}"
 auth:
   credentials:
     token: "{{auth}}"
@@ -31,11 +21,16 @@ scripts:
 
       \r
 
-      pm.test(\"User duplicate\", function () {\r
+      pm.test(\"Validate required fields\", function () {\r
 
-      \    pm.expect(pm.response.json().message).to.eql(\"Este email já está
-      sendo usado\");\r
+      \    pm.expect(pm.response.json().nome).to.exist;\r
+
+      \    pm.expect(pm.response.json().email).to.exist;\r
+
+      \    pm.expect(pm.response.json().password).to.exist;\r
+
+      \    pm.expect(pm.response.json().administrador).to.exist;\r
 
       });"
     language: text/javascript
-order: 3000
+order: 6000

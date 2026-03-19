@@ -1,5 +1,5 @@
 $kind: http-request
-name: Create a duplicate user
+name: Create a user with admin invalid
 url: "{{URL_Base}}/usuarios"
 method: POST
 headers:
@@ -8,13 +8,13 @@ body:
   type: json
   content: "{\r
 
-    \  \"nome\": \"{{name}}\",\r
+    \  \"nome\": \"Invalid admin\",\r
 
-    \  \"email\": \"{{email}}\",\r
+    \  \"email\": \"teste@teste.com\",\r
 
-    \  \"password\": \"{{password}}\",\r
+    \  \"password\": \"teste\",\r
 
-    \  \"administrador\": \"{{admin}}\"\r
+    \  \"administrador\": \"teste\"\r
 
     }"
 auth:
@@ -31,11 +31,11 @@ scripts:
 
       \r
 
-      pm.test(\"User duplicate\", function () {\r
+      pm.test(\"User created\", function () {\r
 
-      \    pm.expect(pm.response.json().message).to.eql(\"Este email já está
-      sendo usado\");\r
+      \    pm.expect(pm.response.json().administrador).to.eql(\"administrador
+      deve ser 'true' ou 'false'\");\r
 
       });"
     language: text/javascript
-order: 3000
+order: 5000

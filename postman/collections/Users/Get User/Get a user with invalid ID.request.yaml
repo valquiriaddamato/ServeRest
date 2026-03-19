@@ -1,0 +1,26 @@
+$kind: http-request
+name: Get a user with invalid ID
+url: "{{URL_Base}}/usuarios/123456789"
+method: GET
+auth:
+  credentials:
+    token: "{{auth}}"
+  type: bearer
+scripts:
+  - type: afterResponse
+    code: "pm.test(\"Status code\", function () {\r
+
+      \    pm.response.to.have.status(400);\r
+
+      });\r
+
+      \r
+
+      pm.test(\"Invalid ID\", function () {\r
+
+      \    pm.expect(pm.response.json().id).to.equals(\"id deve ter exatamente
+      16 caracteres alfanuméricos\");\r
+
+      });"
+    language: text/javascript
+order: 2309657023480782

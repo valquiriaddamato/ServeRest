@@ -1,0 +1,45 @@
+$kind: http-request
+name: Create user for login
+url: "{{URL_Base}}/usuarios"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: "{\r
+
+    \  \"nome\": \"Val\",\r
+
+    \  \"email\": \"val@teste.com\",\r
+
+    \  \"password\": \"teste2026\",\r
+
+    \  \"administrador\": \"true\"\r
+
+    }"
+auth:
+  credentials:
+    token: "{{auth}}"
+  type: bearer
+scripts:
+  - type: afterResponse
+    code: "pm.collectionVariables.set(\"auth\", pm.response.json().authorization);\r
+
+      \r
+
+      pm.test(\"Status code\", function () {\r
+
+      \    pm.response.to.have.status(201);\r
+
+      });\r
+
+      \r
+
+      pm.test(\"User created\", function () {\r
+
+      \    pm.expect(pm.response.json().message).to.eql(\"Cadastro realizado com
+      sucesso\");\r
+
+      });"
+    language: text/javascript
+order: 303

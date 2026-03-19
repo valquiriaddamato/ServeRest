@@ -1,0 +1,37 @@
+$kind: http-request
+name: Get all users
+url: "{{URL_Base}}/usuarios"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{auth}}"
+scripts:
+  - type: afterResponse
+    code: "pm.test(\"Status code\", function () {\r
+
+      \    pm.response.to.have.status(200);\r
+
+      });\r
+
+      \r
+
+      pm.test(\"Get users\", function () {\r
+
+      \    pm.expect(pm.response.json().quantidade).to.exist;\r
+
+      \    pm.expect(pm.response.json().usuarios).to.exist;\r
+
+      \    pm.expect(pm.response.json().usuarios[0].nome).to.exist;\r
+
+      \    pm.expect(pm.response.json().usuarios[0].email).to.exist;\r
+
+      \    pm.expect(pm.response.json().usuarios[0].password).to.exist;\r
+
+      \    pm.expect(pm.response.json().usuarios[0].administrador).to.exist;\r
+
+      \    pm.expect(pm.response.json().usuarios[0]._id).to.exist;\r
+
+      });"
+    language: text/javascript
+order: 926

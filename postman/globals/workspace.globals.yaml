@@ -1,2 +1,5 @@
 name: Globals
-values: []
+values:
+  - key: auth
+    value: ''
+    enabled: true

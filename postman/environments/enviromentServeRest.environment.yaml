@@ -1,21 +1,20 @@
 name: enviromentServeRest
 values:
-  - key: URL_Base
-    value: ""
+  - key: name
+    value: ''
     enabled: true
   - key: email
-    value: ""
-    enabled: true
-  - key: name
-    value: ""
-    enabled: true
-  - key: password
-    value: ""
-    enabled: true
-  - key: admin
-    value: ""
+    value: ''
     enabled: true
   - key: idClient
-    value: ""
+    value: ''
     enabled: true
-color: null
+  - key: password
+    value: ''
+    enabled: true
+  - key: admin
+    value: ''
+    enabled: true
+  - key: URL_Base
+    value: ''
+    enabled: true
