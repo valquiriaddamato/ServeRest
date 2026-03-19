@@ -28,7 +28,7 @@ jobs:
         run: newman run ./postman/collections/Users/.resources/Users.postman_collection.json -e ./postman/collections/Users/.resources/enviromentServeRest.postman_environment.json -r htmlextra --reporter-htmlextra-export ./testresults/newman-report.html
 
       - name: Upload Newman report as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: newman-report
           path: testresults
